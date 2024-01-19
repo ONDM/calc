@@ -1,0 +1,100 @@
+body
+{
+  font-family: 'Your Chosen Font', Arial;
+  overflow: hidden;
+  position: relative;
+}
+
+body::before
+{
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  /*background-image: url('backg1.gif');*/
+}
+
+.calculator, h1, h5, label, input, button, .result 
+  {
+    font-family: 'Your Chosen Font', Arial;
+  }
+
+#yourTextSection
+  {
+    font-family: 'Your Chosen Font', Arial;
+  }
+
+input
+  {
+    padding: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    text-align: center;
+    border-radius: 7px;
+  }
+
+button
+    {
+      padding: 10px;
+      background-color: #575757;
+      color: #1a191a;
+      border: 1px solid #1a191a;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.4s; /* Přechod - změna barvy */
+    }
+
+button:hover
+  {
+    background-color: #1a191a; /* Barva při najetí myší */
+  }
+
+button
+  {
+    transition: background-color 0.3s, transform 0.3s;
+  }
+
+button
+  {
+    cursor: pointer; /* Přizpůsobení kurzoru */
+  }
+
+button:active
+  {
+    transform: scale(0.9);
+  }
+
+h1:hover
+  {
+    color: #c7c7c7; /* Barva při najetí myší */
+  }
+
+@keyframes fade
+  {
+    0% 
+      {
+        opacity: 1;
+      }
+    50% 
+      {
+        opacity: 0.5;
+      }
+    100% 
+      {
+        opacity: 1;
+      }
+  }
+#mainTitle
+  {
+    animation: fade 5s infinite;
+  }
+
+/*Podsvícení tlačítka*/
+button:hover
+  {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  }
