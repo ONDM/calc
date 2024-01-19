@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalkulačka absence</title>
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="/manifest.json">
+<script src="service-worker.js"></script>
+<link rel="icon" href="favicon.png" sizes="150x150">
+<script src="script.js">
+document.addEventListener("DOMContentLoaded", function() 
+  {
+    var defaultButton = document.querySelector('button:first-of-type');
+    changeButtonStyle(defaultButton);
+  });
+  
+</script>
+<style>
+body
+  {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #0E0E0D;
+    color: #CECECE;
+  }
+
+.calculator
+  {
+    text-align: center;
+    background-color: rgba(30, 30, 30, 0.8);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+h1
+  {
+    color: #CECECE;
+    font-weight: bold;
+    margin-top: 0;
+  }
+
+h5
+  {
+    color: #CECECE;
+    font-weight: normal;
+    margin-top: 0;
+  }
+
+label
+  {
+    display: block;
+    margin: 10px 0;
+    color: #CECECE;
+  }
+
+input
+  {
+    padding: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+button
+  {
+    padding: 10px;
+    background-color: #3B3B3A;
+    color: #CECECE;
+    border: 1px solid #CECECE;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+.active-button
+  {
+    background-color: #555;
+  }
+
+.result
+  {
+    margin-top: 20px;
+    font-weight: bold;
+    display: none;
+  }
+
+  .color-selector select
+  {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 2px solid transparent;
+    border-radius: 4px;
+
+#yourTextSection
+  {
+    display: none;
+  }
+</style>
+<script>
+document.addEventListener("DOMContentLoaded", function()
+  {
+    var defaultButton = document.querySelector('button:first-of-type');
+    changeButtonStyle(defaultButton);
+  });
+</script>
+</head>
+<body>
+<div class="calculator">
+OND
+<br>
+<br>
+<h1 id="mainTitle">Kalkulačka absence</h1>
+<h4>Kalkulačka je nastavena na maximálně 25% absence</h4>
+</h3><button onclick="changeButtonStyle(this); restoreInitialContent()">Kolik hodin můžu chybět</button>
+<button onclick="changeButtonStyle(this); fetchUpdatedContent()">Kolik budu mít procent</button>
+<br>
+<br>
+<label for="totalHours">Celkový počet hodin:</label>
+<input type="number" id="totalHours" name="totalHours" placeholder="Napiš celkový počet hodin" oninput="showSecondInput()" min="0" step="1">
+<div id="secondInputSection" style="display: none;">
+<label for="missedHours">Zameškaných počet hodin:</label>
+<input type="number" id="missedHours" name="missedHours" placeholder="Napiš počet hodin, kde jsi chyběl" style="text-align: center; display: none;" min="0" step="1">
+<div id="yourTextSection">
+<label for="yourText">Kolik hodin chceš chybět?</label>
+<input type="number" id="yourText" name="yourText" placeholder="Napiš počet hodin, kolik chceš v řadě chybět" min="0" step="1">
+</div>
+</div>
+<button onclick="calculateAllowedAbsentHours()">Vypočítej</button>
+<div class="result" id="result"></div>
+<script>
+
+  // SERVICE-WORKER!!
+if ('serviceWorker' in navigator) 
+  {
+    navigator.serviceWorker.register('/service-worker.js')
+    .then((registration) => 
+      {
+        console.log('Service Worker zaregistrován:', registration);
+      })
+    .catch((error) => 
+      {
+        console.log('Chyba při registraci Service Worker:', error);
+      });
+  }
+
+var originalContent = document.getElementById('mainTitle').innerHTML;
+var activeButton = null;
+
+function calculateAllowedAbsentHours() 
+  {
+    var totalHoursInput = document.getElementById("totalHours");
+    var missedHoursInput = document.getElementById("missedHours");
+    var resultDiv = document.getElementById("result");
+    if (totalHoursInput.value === "") 
+      {
+        resultDiv.textContent = "Napiš hodnotu do prvního pole.";
+        resultDiv.style.color = "red";
+        resultDiv.style.display = "block";
+        return;
+      }
+
+    if (activeButton.textContent === "Kolik hodin můžu chybět") 
+      {
+        if (missedHoursInput.value === "") 
+            {
+              resultDiv.textContent = "Napiš hodnotu do druhého pole.";
+              resultDiv.style.color = "red";
+              resultDiv.style.display = "block";
+              return;
+            }
+      } 
+    else if (activeButton.textContent === "Kolik budu mít procent") 
+      {
+        var yourTextInput = document.getElementById("yourText");
+        if (missedHoursInput.value === "" || yourTextInput.value === "") 
+          {
+            resultDiv.textContent = "Napiš hodnotu do všech polí.";
+            resultDiv.style.color = "red";
+            resultDiv.style.display = "block";
+            return;
+          }
+      }
+
+        resultDiv.style.display = "none";
+        var totalHoursValue = parseInt(totalHoursInput.value);
+        if (activeButton.textContent === "Kolik hodin můžu chybět") 
+          {
+            var missedHoursValue = parseInt(missedHoursInput.value);
+            var allowedAbsentHours = Math.floor(totalHoursValue * 0.25 - missedHoursValue);
+            var hoursText = (allowedAbsentHours === 1) ? "hodinu" : (allowedAbsentHours >= 2 && allowedAbsentHours <= 4) ? "hodiny" : "hodin";
+            if (allowedAbsentHours === 0) 
+              {
+                resultDiv.textContent = "Už nemůžeš chybět!";
+                resultDiv.style.color = "red";
+              } 
+            else if (allowedAbsentHours < 0) 
+              {
+                resultDiv.textContent = "Už nemůžeš chybět!";
+                resultDiv.style.color = "red";
+              }
+                else 
+                  {
+                    resultDiv.textContent = "Můžeš chybět " + allowedAbsentHours + " " + hoursText + ".";
+                    resultDiv.style.color = (allowedAbsentHours / totalHoursValue * 100 > 25) ? "red" : "green";
+                  }
+          } 
+        else if (activeButton.textContent === "Kolik budu mít procent") 
+          {
+            var missedHoursValue = parseInt(missedHoursInput.value);
+            var yourTextInputValue = parseInt(yourTextInput.value);
+            var totalAbsentHours = missedHoursValue + yourTextInputValue;
+            var allowedAbsentPercentage = (totalAbsentHours / totalHoursValue) * 100;
+
+            resultDiv.textContent = "Budeš mít " + 
+            allowedAbsentPercentage.toFixed(2) + "% absence.";
+            resultDiv.style.color = (allowedAbsentPercentage > 25) ? "red" : "green";
+          }
+
+        resultDiv.style.display = "block";
+  }
+
+function restoreInitialContent() 
+  {
+    document.getElementById('mainTitle').innerHTML = originalContent;
+    clearInputFields();
+    showSecondInput();
+    hideResult();
+  }
+
+function clearInputFields() 
+  {
+    document.getElementById("totalHours").value = "";
+    document.getElementById("missedHours").value = "";
+
+    var yourTextInput = document.getElementById("yourText");
+    if (yourTextInput) 
+      {
+        yourTextInput.value = "";
+      }
+  }
+
+function changeButtonStyle(clickedButton) 
+  {
+    if (activeButton !== null) 
+      {
+        activeButton.classList.remove('active-button');
+      }
+
+    clickedButton.classList.add('active-button');
+    activeButton = clickedButton;
+    updateYourTextVisibility();
+  }
+
+function fetchUpdatedContent() 
+  {
+    clearInputFields();
+    showSecondInput();
+    hideResult();
+    var h1Element = document.querySelector('h1');
+    h1Element.textContent = 'Kalkulačka absence';
+    updateYourTextVisibility();
+  }
+
+function hideResult() 
+  {
+    var resultDiv = document.getElementById("result");
+    resultDiv.style.display = "none";
+  }
+
+  function showSecondInput() 
+  {
+    var totalHoursInput = document.getElementById("totalHours");
+    var totalHoursValue = totalHoursInput.value;
+    var secondInputSection = document.getElementById("secondInputSection");
+    var missedHoursInput = document.getElementById("missedHours");
+    if (/^\d+$/.test(totalHoursValue) && totalHoursValue !== "") 
+      {
+        secondInputSection.style.display = "block";
+        missedHoursInput.style.display = "block";
+        missedHoursInput.addEventListener("input", function ()
+          {
+            updateYourTextVisibility();
+          });
+      } 
+        else 
+          {
+            secondInputSection.style.display = "none";
+            missedHoursInput.style.display = "none";
+          }
+  }
+
+function updateYourTextVisibility() 
+  {
+    var missedHoursInput = document.getElementById("missedHours");
+    var isNumeric = /^\d+$/.test(missedHoursInput.value.trim());
+    var yourTextSection = document.getElementById("yourTextSection");
+    if (activeButton && activeButton.textContent === "Kolik budu mít procent" && isNumeric) 
+      {
+        yourTextSection.style.display = "block";
+      } 
+    else 
+      {
+        yourTextSection.style.display = "none";
+      }
+  }
+</script>
+</div>
+</body>
+</html>
