@@ -2,13 +2,13 @@
   "name": "Kalkulačka absence",
   "short_name": "Kalkulačka",
   "description": "Jednoduchá kalkulačka absence",
-  "start_url": "/index.html",
+  "start_url": "/calc/",
   "display": "standalone",
   "background_color": "#0E0E0D",
   "theme_color": "#3B3B3A",
   "icons": [
     {
-      "src": "favicon.png",
+      "src": "/calc/favicon.png",
       "sizes": "150x150",
       "type": "image/png"
     }
