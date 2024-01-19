@@ -1,4 +1,4 @@
-Zjištění stavu připojení
+// Zjištění stavu připojení
 function isOnline() 
   {
     return navigator.onLine;
