@@ -1,10 +1,10 @@
-const cacheName = 'kalkulacka-v1';
+const cacheName = 'calc-v1';
 const filesToCache = [
   '/calc/',
   '/calc/index.html',
   '/calc/style.css',
-  '/calc/script.js',
-  '/calc/favicon.png'
+  '/calc/favicon.png',
+  '/calc/script.js'
 ];
 
 self.addEventListener('install', event => {
