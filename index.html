@@ -4,8 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kalkulačka absence</title>
-<link rel="stylesheet" href="style.css">
-<link rel="icon" href="favicon.png" sizes="150x150">
+<link rel="stylesheet" href="/calc/style.css">
+<link rel="icon" href="/calc/favicon.png" sizes="150x150">
+<link rel="manifest" href="/calc/manifest.json">
+<script src="/calc/service-worker.js"></script>
 </head>
 
 <body>
@@ -31,7 +33,7 @@ OND
 </div>
 <button onclick="calculateAllowedAbsentHours()">Vypočítej</button>
 <div class="result" id="result"></div>
-<script src="script.js"></script>
+<script src="/calc/script.js"></script>
 </div>
 <div class="lines">
   <div class="line"></div>
