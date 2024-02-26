@@ -147,7 +147,7 @@ function fetchUpdatedContent()
   showSecondInput();
   hideResult();
   var h1Element = document.querySelector('h1');
-  h1Element.textContent = 'Kalkulačka absence';
+  h1Element.textContent = 'KALKULAČKA ABSENCE';
   updateotextVisibility();
 }
 
