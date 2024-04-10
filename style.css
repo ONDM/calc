@@ -13,6 +13,16 @@ body
   position: relative;
 }
 
+#time-image
+{
+  position: absolute;
+  top: -10px;
+  left: 10px;
+  width: 80px;
+  height: 80px;
+  opacity: 0.1;
+}
+
 .calculator
 {
   text-align: center;
