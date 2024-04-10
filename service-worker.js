@@ -4,7 +4,8 @@ const filesToCache = [
   '/calc/index.html',
   '/calc/style.css',
   '/calc/favicon.png',
-  '/calc/script.js'
+  '/calc/script.js',
+  '/calc/logo.png',
 ];
 
 self.addEventListener('install', event => {
