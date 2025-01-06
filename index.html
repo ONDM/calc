@@ -22,13 +22,13 @@
 <br>
 <br>
 <label for="totalHours">Celkový počet hodin:</label>
-<input type="number" id="totalHours" name="totalHours" placeholder="Napiš celkový počet hodin" oninput="showSecondInput()" min="0" step="1">
+<input type="number" inputmode="numeric" id="totalHours" name="totalHours" placeholder="Napiš celkový počet hodin" oninput="showSecondInput()" min="0" step="1">
 <div id="secondInputSection" style="display: none;">
 <label for="missedHours">Zameškaných počet hodin:</label>
-<input type="number" id="missedHours" name="missedHours" placeholder="Napiš počet hodin, kde jsi chyběl" style="text-align: center; display: none;" min="0" step="1">
+<input type="number" inputmode="numeric" id="missedHours" name="missedHours" placeholder="Napiš počet hodin, kde jsi chyběl" style="text-align: center; display: none;" min="0" step="1">
 <div id="text">
 <label for="otext">Kolik hodin chceš chybět?</label>
-<input type="number" id="otext" name="otext" placeholder="Napiš počet hodin, kolik chceš v řadě chybět" min="0" step="1">
+<input type="number" inputmode="numeric" id="otext" name="otext" placeholder="Napiš počet hodin, kolik chceš v řadě chybět" min="0" step="1">
 </div>
 </div>
 <button onclick="calculateAllowedAbsentHours()">Vypočítej</button>
